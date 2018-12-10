@@ -1,0 +1,9 @@
+{
+  "presets": [
+    ["/usr/local/src/node-v8.12.0-linux-x64/node_modules/babel-preset-env", {
+      "targets": {
+        "browsers": ["last 2 versions", "safari >= 7"]
+      }
+    }]
+  ]
+}

@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    config:
+      uri: http://192.168.206.201:8808/omni-config-server/
+      profile: @env@
+      label: master
+      name: message-admin
+  application:
+    name: message-admin

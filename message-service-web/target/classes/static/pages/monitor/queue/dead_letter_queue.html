@@ -1,0 +1,142 @@
+<!--
+    名称：死信队列
+    路径：monitor/queue/dead_letter_queue.html
+    开发人：逯思瑶
+    日期：2018/10/29
+ -->
+<script type="text/x-template" id="monitor-queue-dead_letter_queue">
+    <div>
+        <cust-layout ref="custLayout" :on-change-height="onChangeHeight">
+        <span slot="header">
+        </span>
+            <div slot="query">
+                <i-form :model="formItem" inline>
+                    <form-item>
+                        <i-select filterable clearable v-model="formItem.topic" style="width:250px; " size="small" placeholder="输入Topic进行搜索" clearable>
+                            <i-option v-for="item in topicList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                        </i-select>
+                    </form-item>
+                    <form-item>
+                    </form-item>
+                    <i-button size="small" type="primary" @click="toQuery" style="margin-top: 7px">搜索</i-button>
+                </i-form>
+            </div>
+            <div slot="content">
+                <i-table border :columns="tablColumns" :data="page.list" :height="tableAptHeight"></i-table>
+                <Page :total="page.total" :page-size="page.pageSize" @on-change="changePage"
+                      @on-page-size-change="changePageSize" size="small" transfer show-total show-sizer
+                      show-elevator/>
+            </div>
+        </cust-layout>
+        <!--详情弹出框 -->
+        <Modal v-model="onDetails" title="查看详情" width="580" footer-hide :styles="{top:'5px'}">
+            <row>
+                <i-col span="6">
+                    <Cell title="messageId：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="16">
+                    <Cell :title="detailItem.messageId"/>
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="groupId：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell :title="detailItem.groupId"/>
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="消息内容：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Input type="textarea" :rows="4" v-model="detailItem.message"  />
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="key：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell :title="detailItem.key"/>
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="businessKey：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell :title="detailItem.businessKey"/>
+                </i-col>
+            </row>
+
+            <row>
+                <i-col span="6">
+                    <Cell title="生产者Ip：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell :title="detailItem.producerIp" />
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="生产Time：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell :title="detailItem.producerTime"/>
+                </i-col>
+            </row>
+
+            <row>
+                <i-col span="6">
+                    <Cell title="接收Ip：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell  :title="detailItem.receiveIp" />
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="接收时间：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell  :title="detailItem.receiveTime" />
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="创建ip：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell  :title="detailItem.createIp" />
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="创建时间：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell  :title="detailItem.createTime" />
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="消息状态：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell  :title="detailItem.statuss" />
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="发送次数：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell  :title="detailItem.sendCount" />
+                </i-col>
+            </row>
+        </Modal>
+    </div>
+</script>
+<script type="text/javascript" src="pages/monitor/queue/dead_letter_queue.js"></script>

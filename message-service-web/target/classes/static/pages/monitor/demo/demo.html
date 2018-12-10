@@ -1,0 +1,32 @@
+<!--
+    名称：demo
+    路径：monitor/demo/demo.html
+    开发人：聂涛
+    日期：2018/11/12
+ -->
+<script type="text/x-template" id="monitor-demo-demo">
+    <div style="height: 500px">
+            <Row :gutter="10">
+                <i-col  span="3" v-for="(infor, i) in inforCardData" :key="`infor-${i}`" style="height: 120px;">
+                    <infor-card shadow :color="infor.color" :icon="infor.icon" :icon-size="30">
+                        <count-to :end="infor.count" count-class="count-style"/>
+                        <p>{{ infor.title }}</p>
+                    </infor-card>
+                </i-col>
+            </Row>
+            <Row :gutter="20" style="margin-top: 20px;">
+                <i-col span="8">
+                    <Card shadow>
+                        <pie style="height: 300px;" :value="pieData" text="用户访问来源"></pie>
+                    </Card>
+                </i-col>
+                <i-col span="16">
+                    <Card shadow>
+                        <bar style="height: 300px;"  :value="barData" text="每周用户活跃量"/>
+                    </Card>
+                </i-col>
+            </Row>
+    </div>
+</script>
+
+<script type="text/javascript" src="pages/monitor/demo/demo.js"></script>

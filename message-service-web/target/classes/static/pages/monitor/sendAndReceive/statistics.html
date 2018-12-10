@@ -1,0 +1,58 @@
+<!--
+    名称：收发统计
+    路径：monitor/sendAndReceive/statistics.html
+    开发人：杨婷婷
+    日期：2018/10/29
+ -->
+<script type="text/x-template" id="monitor-sendAndReceive-statistics">
+    <div>
+        <cust-layout ref="custLayout" :on-change-height="onChangeHeight" >
+            <div slot="query">
+                <i-Form :model="searchForm"  @keyup.enter.native="" :label-width="120" style="margin-left: 180px" >
+                    <form-item label="Topic：" inline >
+                        <Input v-model="searchForm.topic" placeholder="请输入" style="width: 380px" >
+                    </form-item >
+                    <form-item label="子Topic："  inline>
+                        <Input v-model="searchForm.childTopic" placeholder="请输入"  style="width: 380px">
+                    </form-item>
+                    <form-item label="时间范围：">
+                        <DatePicker type="datetimerange" placeholder="Select date and time" style="width: 380px"></DatePicker>
+                    </form-item>
+                    <form-item label="Qos：">
+                        <RadioGroup v-model="searchForm.button1" type="button" >
+                            <Radio label="1"></Radio>
+                            <Radio label="2"></Radio>
+                            <Radio label="全部"></Radio>
+                        </RadioGroup>
+                    </form-item>
+                    <form-item label="消息类型：">
+                        <RadioGroup v-model="searchForm.button2" type="button" >
+                            <Radio label="发布和订阅"></Radio>
+                            <Radio label="点对点"></Radio>
+                            <Radio label="全部"></Radio>
+                        </RadioGroup>
+                    </form-item>
+                    <form-item label="采集类型：">
+                        <RadioGroup v-model="searchForm.button3" type="button" >
+                            <Radio label="生产"></Radio>
+                            <Radio label="消费"></Radio>
+                        </RadioGroup>
+                    </form-item>
+                    <form-item label="数据类型：">
+                        <RadioGroup v-model="searchForm.button4" type="button" >
+                            <Radio label="总量"></Radio>
+                            <Radio label="TPF"></Radio>
+                        </RadioGroup>
+                    </form-item>
+                    <i-button size=""  @click="" style="margin-top: 4px;margin-left: 80px">搜索</i-button>
+                </i-Form>
+            </div>
+
+        </cust-layout>
+    </div>
+
+
+
+</script>
+
+<script type="text/javascript" src="pages/monitor/sendAndReceive/statistics.js"></script>

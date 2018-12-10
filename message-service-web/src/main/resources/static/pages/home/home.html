@@ -1,0 +1,51 @@
+<script type="text/x-template" id="admin-home">
+    <layout>
+        <Content>
+            <Row :gutter="10" style="width: 100%">
+
+                <i-col  span="3" v-for="(infor, i) in inforData" :key="`infor-${i}`" style="height: 120px;">
+                    <infor-card shadow :color="infor.color" :icon="infor.icon" :icon-size="30">
+                        <div class="icon-img" v-if="infor.icon==null">
+                                <object data="images/icon_sms_1.svg" width=30 height=30 type="image/svg+xml"></object>
+                        </div>
+                        <div @click="clickJump(infor)">
+                        <count-to :end="infor.count"  count-class="count-style"/>
+                        <p>{{ infor.title }}</p>
+                        </div>
+                    </infor-card>
+                </i-col>
+            </Row>
+        </Content>
+
+        <Content>
+            <Row :gutter="20" style="width: 100%;margin-top: 20px;">
+                <i-col span="10">
+                    <Card shadow>
+                        <DatePicker v-model="topicTime" format="yyyy-MM-dd" type="date" @on-change="changeTime1" :options="optionsTime" placeholder="Select date" style="width: 115px;margin-left: 390px" size="small" :clearable="false"></DatePicker>
+                        <div v-if="topicData.length>0">
+                            <pie ref="pie" style="height: 300px;"  v-model="topicData" :text="topicData[0].statisticsDate"></pie>
+                        </div>
+                        <div v-else style="height: 300px;position: relative">
+                            <div style="position: absolute;margin-left: 150px;margin-top:10px;font-weight:bold;font-size: 18px">{{statisticsDate}}</div>
+                            <span style="font-size: 23px;margin-left: 200px;margin-top:150px;position: absolute">暂无数据</span>
+                        </div>
+                    </Card>
+                </i-col>
+                <i-col span="14">
+                    <Card shadow>
+                        <DatePicker v-model="time" format="yyyy-MM-dd" type="date"  @on-change="changeTime" :options="options4" placeholder="Select date" style="width: 115px;margin-left: 610px" size="small" :clearable="false"></DatePicker>
+                        <bar ref="bar" style="height: 300px;"   v-model="barData" text="每周消息数量"/>
+                    </Card>
+                </i-col>
+            </Row>
+        </Content>
+    </layout>
+</script>
+<style>
+    .icon-img{
+        position:absolute;
+        left:-42px;
+        top:11px;
+    }
+</style>
+<script type="text/javascript" src="pages/home/home.js"></script>

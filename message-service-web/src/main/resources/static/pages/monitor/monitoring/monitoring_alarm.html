@@ -1,0 +1,70 @@
+<!--
+    名称：监控报警
+    路径：monitor/monitoring/monitoring_alarm.html
+    开发人：李秀敏
+    日期：2018/10/29
+ -->
+<script type="text/x-template" id="monitor-monitoring-monitoring_alarm">
+    <div>
+        <cust-layout ref="custLayout" :on-change-height="onChangeHeight">
+        <span slot="header" >
+            <ButtonGroup>
+        	<i-button size="small" @click="addMonitor=true">新建监控项</i-button>
+           </ButtonGroup>
+        </span>
+            <div slot="content">
+                <i-table :columns="columns" :data="page.content" size="small" border ref="table" :height="tableAptHeight">
+                    <template slot="action" slot-scope="propsList">
+                        <ButtonGroup>
+                            <i-button size="small" @click="delTopicById(propsList.row)">删除</i-button>
+                            <i-button size="small" @click="addCustomer(propsList.row)">创建消费者</i-button>
+                            <i-button size="small" @click="checkById(propsList.row)">查看</i-button>
+                        </ButtonGroup>
+                    </template>
+                </i-table>
+                <Page :total="page.totalElements" :page-size="page.size"   @on-change="changePage" @on-page-size-change="changePageSize" transfer prev-text="上一页" next-text="下一页" show-sizer size="small"/>
+            </div>
+        </cust-layout>
+        <common-submit-modal v-model="addMonitor" title="新增监控项" width="600" :submit="submitMonitor" :cancel="editCancel">
+            <i-form v-if="addMonitor" :label-width="120" :model="addMonitorForm" slot="content" ref="monitorForm" :rules="ruleValidate">
+                <Form-item label="Consumer ID：" prop="consumerId">
+                    <i-select filterable clearable v-model="addMonitorForm.topic"  placeholder="输入ConsumerId进行搜索" clearable>
+                        <i-option v-for="item in consumerList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                    </i-select>
+                </Form-item>
+                <Form-item label="Topic：" prop="topic">
+                    <i-select filterable clearable v-model="addMonitorForm.topic"  placeholder="输入Topic进行搜索" clearable>
+                        <i-option v-for="item in topicList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                    </i-select>
+                </Form-item>
+                <Form-item label="堆积量阈值：">
+                    <Input v-model="addMonitorForm.desc" placeholder="请输入"></Input>
+                </Form-item>
+                <Form-item label="消费延迟阈值：">
+                    <Input v-model="addMonitorForm.desc" placeholder="请输入"></Input>
+                </Form-item>
+                <Form-item :label-width="0">
+                <span style="float: left">报警时间和频率</span>
+                </Form-item>
+                <Form-item label="报警时间：">
+                    <Row>
+                    <Col span="10">
+                    <TimePicker confirm placeholder="Select time" style="width: 185px"></TimePicker>
+                    </Col>
+                        <Col span="2">至</Col>
+                    <Col span="10">
+                    <TimePicker confirm placeholder="Select time" style="width: 185px"></TimePicker>
+                    </Col>
+                    </Row>
+                </Form-item>
+                <Form-item label="报警频率：" prop="topic">
+                    <i-select filterable clearable v-model="addMonitorForm.topic"  placeholder="输入Topic进行搜索" clearable>
+                        <i-option v-for="item in topicList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                    </i-select>
+                </Form-item>
+            </i-form>
+        </common-submit-modal>
+    </div>
+</script>
+
+<script type="text/javascript" src="pages/monitor/monitoring/monitoring_alarm.js"></script>

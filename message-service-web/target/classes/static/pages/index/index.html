@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>用户中心</title>
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <link rel="bookmark" href="/favicon.ico"/>
+    <script type="text/javascript" src="plugin/common/env.js" ></script>
+    <script type="text/javascript" src="plugin/jquery/3.3.1/jquery.min.js" ></script>
+    <script type="text/javascript" src="plugin/common/common.js" ></script>
+    <link rel="stylesheet" type="text/css" href="plugin/iview/styles/iview.css" />
+    <script type="text/javascript" src="plugin/iview/js/vue.min.js" ></script>
+    <script type="text/javascript" src="plugin/iview/js/iview.min.js" ></script>
+    <script type="text/javascript" src="plugin/jquery/jquery.history.js" ></script>
+    <script type="text/javascript" src="plugin/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="plugin/countUp/countUp.js"></script>
+    <link rel="stylesheet" type="text/css" href="pages/index/index.css" />
+</head>
+
+<body >
+<div id="app">
+    <div class="main layout" style="height: 100%;" >
+        <Layout style="height: 100%;" >
+            <Header>
+                <i-menu mode="horizontal" @on-select="openSystem" theme="dark" :active-name="systemActiveId">
+                    <div class="layout-logo">
+                        <h1 style="width: 250px; line-height: 100%; vertical-align: middle; color: #dadada;text-align: center;"></h1>
+                    </div>
+                    <div class="layout-nav">
+                        <!--<menu-item name="-1">-->
+                        <!--<Icon type="md-home"></Icon>首页-->
+                        <!--</menu-item>-->
+                        <menu-item v-for="(item,index) in systemList" :name="index">
+                            <Icon type="ios-keypad"></Icon>
+                            <span v-text="item.name"></span>
+                        </menu-item>
+                    </div>
+                </i-menu>
+            </Header>
+            <Layout >
+                <Sider ref="side1" collapsible :collapsed-width="60" collapsed-height="100" width="240"
+                       v-model="isCollapsed" :style="{overflow: 'hidden'}" class="left-sider"  >
+                    <div class="side-menu-wrapper">
+                        <i-menu ref="menu" width="auto" theme="dark" width="auto" class="menu-item"
+                                :active-name="getActiveName(activeName)" :open-names="openedNames" @on-select="openPage" accordion="true"  >
+                            <side-menu-item v-for="item in menuList" :menu="item" v-show="!isCollapsed" :key="item.id" ></side-menu-item>
+                        </i-menu>
+                        <side-menu-head @click="openPage"  :list="menuList" v-show="isCollapsed"></side-menu-head>
+                    </div>
+                </Sider>
+
+                <Layout ref="moduleWrapper" @scroll.native="handScroll" >
+                    <!--<Back-Top :style="{display:showBackTop?'block':'none'}" @on-click="scrollTop" ></Back-Top>-->
+                    <Content class="main-content-con">
+                        <Layout class="main-layout-con">
+                            <div class="tag-nav-wrapper" >
+                                <tags-nav ref="tagsNav" :value="activeName" @input="handleClick" :list="tagNavList" @on-close="handleTagsOption" />
+                            </div>
+                            <Content class="content-wrapper" id="bodyWrapper"  >
+                                <layout>
+                                    <transition name="fade" mode="out-in" appear>
+                                        <keep-alive :include="cacheList" >
+                                            <component ref="moduleComp" :is="componentId"  ></component>
+                                        </keep-alive>
+                                    </transition>
+                                </layout>
+                            </Content>
+                        </Layout>
+                    </Content>
+
+                </Layout>
+            </Layout>
+        </Layout>
+
+        <!-- 登录弹出框 -->
+        <modal v-model="showLoginModel" footer-hide title="用户登录" width="300" >
+            <i-Form  :model="loginFormData" :rules="loginFormRule">
+                <form-item prop="user">
+                    <i-input type="text" v-model="loginFormData.loginName" placeholder="用户名" >
+                        <Icon type="ios-person-outline" slot="prepend"></Icon>
+                    </i-input>
+                </form-item>
+                <form-item prop="password">
+                    <i-Input type="password" v-model="loginFormData.password" placeholder="密码">
+                        <Icon type="ios-lock-outline" slot="prepend"></Icon>
+                    </i-Input>
+                </form-item>
+                <form-item>
+                    <i-button type="primary" @click="login('formInline')" long>登录</i-button>
+                </form-item>
+            </i-Form>
+        </modal>
+    </div>
+</div>
+<!-- 组件注册装置 -->
+<div id="componentRegister" style="display: none;" ></div>
+<script type="text/x-template" id="side-menu-item">
+    <Submenu :name="menu.menuId" v-if="menu.children && menu.children.length > 0"  >
+        <template slot="title" >
+            <Icon :type=" menu.iconCls || 'md-menu' "></Icon>
+            <span v-text="menu.name" :title="menu.name" class="menu-title" ></span>
+        </template>
+        <side-menu-item v-for="item in menu.children" :menu="item" :key="item.id" ></side-menu-item>
+    </Submenu>
+    <menu-item v-else :name="menu.menuId" >
+        <icon :type="menu.iconCls || 'ios-photos' "></icon>
+        <span v-text="menu.name" :title="menu.name" class="menu-title" ></span>
+    </menu-item>
+</script>
+<script type="text/x-template" id="collapsed-menu" >
+    <Dropdown :refs="'menuDd'+parentItem.id" transfer :placement="placement" @on-click="handleClick" >
+        <a :class="subMenuCls"  type="text"  @mouseover="handleMousemove($event, parentItem.children)"
+           :style="{textAlign: !hideTitle ? 'left' : ''}">
+            <icon :size="rootIconSize" :color="textColor" :type="parentItem.icon || 'ios-navigate' "></icon>
+            <span class="menu-title" v-if="!hideTitle">{{ parentItem.name }}</span>
+            <icon style="float: right;" v-if="!hideTitle" type="ios-arrow-forward" :size="16"></icon>
+        </a>
+        <DropdownMenu slot="list" :style="{zIndex:posIndex}" >
+            <template v-for="child in parentItem.children">
+                <collapsed-menu :icon-size="iconSize"
+                                v-if="child.children && child.children.length > 0"
+                                :parentItem="child" :key="`drop-${child.id}`" :hideTitle="false"
+                                :subMenuCls="'sub-drop-menu-a'" posIndex:="buffIndex(posIndex)" >
+                </collapsed-menu>
+                <DropdownItem v-else :key="`drop-${child.id}`" :name="child.menuId"  >
+                    <icon :size="iconSize" :type="child.icon" v-if="child.icon" ></icon>
+                    <span class="menu-title">{{ child.name }}</span></DropdownItem>
+            </template>
+        </DropdownMenu>
+    </Dropdown>
+</script>
+<script type="text/x-template" id="side-menu-head">
+    <div class="menu-collapsed" >
+        <template v-for="item in list">
+            <collapsed-menu v-if="item.children && item.children.length > 0"
+                            hide-title :root-icon-size="rootIconSize" @click="handleSelect"
+                            :icon-size="iconSize" :theme="theme" :parentItem="item" :posIndex="100"
+                            :key="`drop-menu-${item.id}`">
+            </collapsed-menu>
+            <Tooltip transfer v-else :content="item.name" placement="right" :key="`drop-menu-${item.id}`">
+                <a @click="handleSelect(item.menuId)" class="drop-menu-a" :style="{textAlign: 'center'}">
+                    <icon :size="rootIconSize" :color="textColor" :type=" item.iconCls || 'ios-navigate' "></icon>
+                </a>
+            </Tooltip>
+        </template>
+    </div>
+</script>
+<script type="text/x-template" id="tags-nav">
+    <div class="tags-nav">
+        <div class="btn-con left-btn">
+            <Button type="text" @click="handleScroll(240)">
+                <Icon :size="18" type="ios-arrow-back" />
+            </Button>
+        </div>
+        <div class="btn-con right-btn">
+            <Button type="text" @click="handleScroll(-240)">
+                <Icon :size="18" type="ios-arrow-forward" />
+            </Button>
+        </div>
+        <div class="close-con">
+            <nav-drop-down @on-close="handleTagsOption" ></nav-drop-down>
+        </div>
+        <div class="scroll-outer" ref="scrollOuter" @DOMMouseScroll="handleMouseScroll" @mousewheel="handleMouseScroll">
+            <div ref="scrollBody" class="scroll-body" :style="{left: tagBodyLeft + 'px'}">
+                <transition-group name="taglist-moving-animation" >
+                    <Tag   ref="tagsPageOpened"
+                           type="dot"
+                           v-for="item in list"
+                           :key="item.menuId"
+                           :name="item.menuId "
+                           @on-close="handleClose"
+                           @click.native="handleClick(item)"
+                           :closable=" item.menuId != '#1' "
+                           :color=" item.menuId === value ? 'primary' : 'default'"
+                           ref="tagsPageOpened" >
+                        <span v-text="item.name" ></span>
+                    </Tag>
+                </transition-group>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/x-template" id="nav-drop-down" >
+    <Dropdown transfer="true"  @on-click="handleTagsOption" style="margin-top:8px;" placement="left-start">
+        <i-button size="small" type="text" >
+            <Icon :size="18"  type="ios-close-circle-outline" />
+        </i-button>
+        <DropdownMenu slot="list">
+            <DropdownItem name="close-all" >关闭所有</DropdownItem>
+            <DropdownItem name="close-others" >关闭其他</DropdownItem>
+        </DropdownMenu>
+    </Dropdown>
+</script>
+<script type="text/x-template" id="common-tree" >
+    <div class="ivu-tree">
+        <common-tree-node :item="item" v-for="item in data"
+                          :selectNode="selectNode"
+                          :on-select="handlerSelectNode" ></common-tree-node>
+    </div>
+</script>
+<script type="text/x-template" id="cust-layout" >
+    <card ref="card" class="channel-card" >
+        <div ref="header" slot="title" style="height:40px"  v-if="!hideHeader" >
+            <icon v-if="!hideQuery" :type="zheIcon" size="14" style="cursor: pointer;margin-right:10px;"  @click.native="zheQilai" ></icon>
+            <slot name="header"></slot>
+            <Divider />
+        </div>
+        <div>
+            <div ref="query" style="position:relative;" v-show="showQuery" v-if="!hideQuery" >
+                <slot name="query"></slot>
+                <Divider class="channel-divider"/>
+            </div>
+            <div>
+                <slot name="content"></slot>
+            </div>
+        </div>
+    </card>
+</script>
+
+<script type="text/x-template" id="common-tree-node" >
+    <ul class="ivu-tree-children" >
+        <li>
+            <span :class="{'ivu-tree-arrow':true}"
+                  @click="expendAndCloseNode">
+                <icon v-if="item.children && item.children.length > 0" :type="item.expended ? 'md-remove' : 'md-add'"
+                      class="ivu-tree-arrow"></icon>
+                <icon v-else type="ios-document-outline" ></icon>
+            </span>
+            <span :class="{'ivu-tree-title':true,'ivu-tree-title-selected':item.id == selectNode.id }" @click="handlerSelectNode(item)" >{{item.title}}</span>
+            <common-tree-node :item="child" v-if="item.expended && item.children && item.children.length > 0" :selectNode="selectNode"
+                              v-for="child in item.children" :on-select="handlerSelectNode"
+            ></common-tree-node>
+        </li>
+    </ul>
+</script>
+<script  type="text/x-template" id="common-delete-modal" >
+    <Modal transfer v-model="value" width="320" @on-cancel="onCancel1" mask-closable  >
+        <div style="text-align:center;height:80px">
+            <p style="line-height:80px;font-size:16px"><Icon type="ios-information-circle" size="46"/>{{title}}?</p>
+        </div>
+        <div slot="footer" style="text-align:center;">
+            <i-button @click="onOk1" >确认</i-button>
+            <i-button @click="onCancel1" style="margin-left: 60px" >取消</i-button>
+        </div>
+    </Modal>
+</script>
+<script  type="text/x-template" id="common-submit-modal" >
+    <Modal ref="modal" v-model="value" :title="title" @on-cancel="modelCancel" :width="width"
+           :styles="styles" :mask-closable="false" >
+        <slot name="content"></slot>
+        <div slot="footer" style="text-align: center;">
+            <Button ref="submit" @click="modelSubmit" >{{submitName}}</Button>
+            <Button ref="cancel" @click="modelCancel" style="margin-left: 60px"  >{{cancelName}}</Button>
+        </div>
+    </Modal>
+</script>
+<script  type="text/x-template" id="drag-cell" >
+    <div @mouseover="showMove" @mouseout="hideMove" :style="dragStyle" >
+        <icon type="md-move" @dragstart.native="dragStart(event,params.index)" @dragenter.native="dragEnter(event,params.index)"
+              @dragend.native="dragEnd" :style="{visibility:dragVo.showDrag?'visible':'hidden'}"
+              @dragleave.native="dragLeave(params.index)" size="16" draggable ></icon>
+        <span v-text="params.row[attr]"></span>
+    </div>
+</script>
+<script  type="text/x-template" id="shop" >
+    <i-select v-model="value" :size="size" @on-change="change" transfer>
+        <slot name="default" ></slot>
+        <i-option v-for="item in list" :value="item.value+''" :key="item.value">{{ item.label }}</i-option>
+    </i-select>
+</script>
+<script  type="text/x-template" id="catalog" >
+    <i-select ref="select" :="size" v-model="value" @on-change="change" transfer>
+        <i-option v-for="item in list" :value="item.id+''" :key="item.id">{{ item.subjectName }}</i-option>
+    </i-select>
+</script>
+<script type="text/x-template" id="img-preview" >
+    <Poptip :placement="placement" width="250" v-if="url" >
+        <i-Button size="small">预览</i-Button>
+        <img width="200" height="200" :src="url+'?x-oss-process=image/resize,w_200'" slot="content" >
+    </Poptip>
+</script>
+<script type="text/x-template" id="bar">
+    <div ref="dom1" class="charts chart-bar"></div>
+</script>
+<script type="text/x-template" id="pie">
+    <div ref="dom2" class="charts chart-pie"></div>
+</script>
+<script type="text/x-template" id="CommonIcon">
+    <component :is="iconType" :type="iconName" :color="iconColor" :size="iconSize"/>
+</script>
+<script type="text/x-template" id="Icons">
+    <i :class="`iconfont icon-${type}`" :style="styles"></i>
+</script>
+<script type="text/x-template" id="InforCard">
+    <Card :shadow="shadow" class="info-card-wrapper" :padding="0">
+        <div class="content-con">
+            <div class="left-area" :style="{background: color, width: leftWidth}">
+                <common-icon class="icon" :type="icon" :size="iconSize" color="#fff"/>
+            </div>
+            <div class="right-area" :style="{width: rightWidth}">
+                <div>
+                    <slot></slot>
+                </div>
+            </div>
+        </div>
+    </Card>
+</script>
+<script type="text/x-template" id="CountTo">
+    <div class="count-to-wrapper">
+        <slot name="left"/>
+        <p class="content-outer"><span :class="['count-to-count-text', countClass]" :id="counterId">{{ init }}</span><i :class="['count-to-unit-text', unitClass]">{{ unitText }}</i></p>
+        <slot name="right"/>
+    </div>
+</script>
+<script type="text/javascript" src="pages/index/index.js"></script>
+</body>
+</html>

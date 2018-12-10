@@ -1,0 +1,12 @@
+spring:
+  #cloud:
+    #config:
+      #uri: http://192.168.206.201:8808/omni-config-server/
+      #profile: @env@
+      #label: master
+      #name: message-service
+  application:
+    name: message-service
+  logstash:
+    kafka-servers: @kafkaServer@
+    logs-topic: @kafkaLogTopic@

@@ -1,0 +1,74 @@
+<!--
+    名称：tipic关联
+    路径：monitor/topicRelevance/topic_rel.html
+    开发人：聂涛
+    日期：2018/10/29
+ -->
+<script type="text/x-template" id="monitor-topicRelevance-topic_rel">
+    <div>
+        <cust-layout ref="custLayout" :hide-header="true" :on-change-height="onChangeHeight" >
+    <span slot="header" >
+
+    </span>
+            <div slot="query">
+                <i-Form :label-width="20"  size="small" :model="searchForm" @keyup.enter.native="query" inline >
+                    <form-item label="" >
+                        <i-input v-model="queryData.topic"   placeholder="输入主题名称..." size="small" style="width: 200px" />
+                    </form-item>
+                    <form-item label="" >
+                        <i-input v-model="queryData.serverIp"   placeholder="输入服务IP..." size="small" style="width: 200px" />
+                    </form-item>
+                </i-Form>
+            </div>
+            <div slot="content" >
+                <i-table :columns="columns" size="small" :height="tableAptHeight" border  :data="page.content">
+                </i-table>
+                <Page :total="page.totalElements" @on-change="onChange_page" @on-page-size-change="onPageChange_pageSize" size="small" :page-size="page.size"  prev-text="上一页" next-text="下一页"  transfer show-sizer  />
+            </div>
+        </cust-layout>
+
+        <!--&lt;!&ndash; 点击新建按钮 &ndash;&gt;-->
+        <!--<common-submit-modal v-model="addModel" title="创建MQTT Group ID" :submit="addSave" >-->
+            <!--<i-form v-if="addModel" :model="addForm" :label-width="90" slot="content" ref="addForm" :rules="ruleValidate">-->
+                <!--<Form-item label="服务Ip：" prop="serverIp" >-->
+                    <!--<i-input v-model="addForm.serverIp"/>-->
+                <!--</Form-item>-->
+                <!--<FormItem label="服务组" prop="serverGroupId">-->
+                    <!--<Select v-model="addForm.serverGroupId" clearable placeholder="请选择组">-->
+                        <!--<Option v-for="item in findGroupId" :value="item.id" :key="item.id">{{ item.groupName }}</Option>-->
+                    <!--</Select>-->
+                <!--</FormItem>-->
+                <!--<Form-item label="端口：" prop="port" >-->
+                    <!--<i-input v-model="addForm.port"/>-->
+                <!--</Form-item>-->
+                <!--<Form-item label="描述：">-->
+                    <!--<i-input v-model="addForm.desc"/>-->
+                <!--</Form-item>-->
+            <!--</i-form>-->
+        <!--</common-submit-modal>-->
+
+        <!--&lt;!&ndash; 点击修改按钮 &ndash;&gt;-->
+        <!--<common-submit-modal v-model="updateModel" title="创建MQTT Group ID" :submit="updateSave" >-->
+            <!--<i-form v-if="updateModel" :model="updateForm" :label-width="90" slot="content" ref="updateForm" :rules="ruleValidate">-->
+                <!--<Form-item label="服务Ip：" prop="serverIp" >-->
+                    <!--<i-input v-model="updateForm.serverIp"/>-->
+                <!--</Form-item>-->
+                <!--<FormItem label="服务组" prop="serverGroupId">-->
+                    <!--<Select v-model="updateForm.serverGroupId" clearable placeholder="请选择组">-->
+                        <!--<Option v-for="item in findGroupId" :value="item.id" :key="item.id">{{ item.groupName }}</Option>-->
+                    <!--</Select>-->
+                <!--</FormItem>-->
+                <!--<Form-item label="端口：" prop="port" >-->
+                    <!--<i-input v-model="updateForm.port"/>-->
+                <!--</Form-item>-->
+                <!--<Form-item label="描述：">-->
+                    <!--<i-input v-model="updateForm.desc"/>-->
+                <!--</Form-item>-->
+            <!--</i-form>-->
+        <!--</common-submit-modal>-->
+        <!--&lt;!&ndash;点击删除按钮触发&ndash;&gt;-->
+        <!--<common-delete-modal v-model="deleteModal" title="是否要删除" :on-ok="confirmDelete" ></common-delete-modal>-->
+    </div>
+</script>
+
+<script type="text/javascript" src="pages/monitor/topicRelevance/topic_rel.js"></script>

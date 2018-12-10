@@ -1,0 +1,11 @@
+server:
+  port: 7770
+spring:
+  cloud:
+    config:
+      uri: http://192.168.206.201:8808/omni-config-server/
+      profile: demo
+      label: master
+      name: message-service-web
+  application:
+    name: message-service-web

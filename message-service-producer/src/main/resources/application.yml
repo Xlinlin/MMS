@@ -1,0 +1,14 @@
+server:
+  port: 7768
+spring:
+  data:
+    mongodb:
+      uri: mongodb://demo:Demo123@192.168.206.206:3717/demo
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.206.211:8888/eureka/
+

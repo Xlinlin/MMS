@@ -1,0 +1,446 @@
+html,body{
+    height:100%;
+}
+#app {
+    width: 100%;
+    height: 100%;
+}
+.layout{
+    border: 1px solid #d7dde4;
+    background: #f5f7f9;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.layout-logo{
+    width: 100px;
+    height: 30px;
+
+
+    float: left;
+    position: relative;
+    top: 15px;
+    left: 20px;
+}
+.layout-nav{
+    margin: 0 auto;
+    display: inline-block;
+    right: 0px;
+    position: absolute;
+}
+.layout-header-bar{
+    background: #fff;
+    box-shadow: 0 1px 1px rgba(0,0,0,.1);
+}
+.layout-logo-left{
+    width: 90%;
+    height: 30px;
+    background: #5b6270;
+    border-radius: 3px;
+    margin: 15px auto;
+}
+.menu-icon{
+    transition: all .3s;
+}
+.rotate-icon{
+    transform: rotate(-90deg);
+}
+.i-menu-item span{
+    display: inline-block;
+    overflow: hidden;
+    width: 69px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+    transition: width .2s ease .2s;
+}
+.i-menu-item i{
+    transform: translateX(0px);
+    transition: font-size .2s ease, transform .2s ease;
+    vertical-align: middle;
+    font-size: 16px;
+}
+.collapsed-menu span{
+    width: 0px;
+    transition: width .2s ease;
+}
+.collapsed-menu i{
+    transform: translateX(5px);
+    transition: font-size .2s ease .2s, transform .2s ease .2s;
+    vertical-align: middle;
+    font-size: 22px;
+}
+
+/*********** tags-nav begin ***********/
+.tag-nav-wrapper {
+    padding: 0;
+    height: 40px;
+    background: #F0F0F0;
+    overflow: hidden;
+}
+.tags-nav {
+    position: relative;
+    border-top: 1px solid #F0F0F0;
+    border-bottom: 1px solid #F0F0F0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width: 100%;
+    height: 100%;
+}
+.tags-nav .close-con {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 32px;
+    background: #fff;
+    text-align: center;
+    z-index: 10;
+}
+.tags-nav .btn-con.left-btn {
+    left: 0px;
+}
+.tags-nav .btn-con {
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    background: #fff;
+    padding-top: 3px;
+    z-index: 10;
+}
+.tags-nav .btn-con button {
+    padding: 6px 4px;
+    line-height: 14px;
+    text-align: center;
+}
+.tags-nav .btn-con.right-btn {
+    right: 32px;
+    border-right: 1px solid #F0F0F0;
+}
+.tags-nav .btn-con {
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    background: #fff;
+    padding-top: 3px;
+    z-index: 10;
+}
+.tags-nav .scroll-outer {
+    position: absolute;
+    left: 28px;
+    right: 61px;
+    top: 0;
+    bottom: 0;
+    -webkit-box-shadow: 0px 0 3px 2px rgba(100, 100, 100, 0.1) inset;
+    box-shadow: 0px 0 3px 2px rgba(100, 100, 100, 0.1) inset;
+}
+.tags-nav .scroll-outer .scroll-body {
+    height: calc(100% - 1px);
+    display: inline-block;
+    padding: 1px 4px 0;
+    position: absolute;
+    overflow: visible;
+    white-space: nowrap;
+    -webkit-transition: left .3s ease;
+    transition: left .3s ease;
+}
+.main .content-wrapper {
+    /*padding: 8px;*/
+    padding:3px;
+    height: calc(100% - 80px);
+    overflow: auto;
+}
+.main .ivu-select-selection>div{
+    display: flex;
+}
+.ivu-transfer-list-header-count{
+    visibility: hidden;
+}
+/*********** tags-nav end ***********/
+
+/* main begin*/
+.left-sider{
+    background: #141821;
+}
+.left-sider .ivu-layout-sider-trigger{
+    background: #141821;
+}
+.main .logo-con {
+    height: 64px;
+    padding: 10px;
+}
+.main .left-sider .ivu-layout-sider-children
+{
+    overflow-y: scroll;
+    margin-right: -20px;
+    height:92%;
+}
+/* main end*/
+.loading-spin-container{
+    display: inline-block;
+    position: fixed;
+    border: 1px solid #eee;
+    z-index: 1000;
+}
+
+.side-menu-wrapper {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.side-menu-wrapper .menu-collapsed {
+    padding-top: 10px;
+}
+.side-menu-wrapper .menu-collapsed .ivu-dropdown {
+    width: 100%;
+}
+.side-menu-wrapper .menu-collapsed .ivu-dropdown .ivu-dropdown-rel a {
+    width: 100%;
+}
+.side-menu-wrapper .menu-collapsed .ivu-tooltip {
+    width: 100%;
+}
+.side-menu-wrapper .menu-collapsed .ivu-tooltip .ivu-tooltip-rel {
+    width: 100%;
+}
+.side-menu-wrapper .menu-collapsed .ivu-tooltip .ivu-tooltip-popper .ivu-tooltip-content .ivu-tooltip-arrow {
+    border-right-color: #fff;
+}
+.side-menu-wrapper .menu-collapsed .ivu-tooltip .ivu-tooltip-popper .ivu-tooltip-content .ivu-tooltip-inner {
+    background: #fff;
+    color: #495060;
+}
+.side-menu-wrapper a.drop-menu-a {
+    display: inline-block;
+    padding: 10px 15px;
+    width: 100%;
+    text-align: center;
+    color: #495060;
+}
+.menu-title {
+    padding-left:6px;
+}
+.sub-drop-menu-a{
+    color: #515a6e;
+}
+.layout-con{
+    height: 100%;
+    width: 100%;
+}
+.menu-item span{
+    display: inline-block;
+    overflow: hidden;
+    width: 100px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+    transition: width .2s ease .2s;
+}
+.menu-item i{
+    transform: translateX(0px);
+    transition: font-size .2s ease, transform .2s ease;
+    vertical-align: middle;
+    font-size: 16px;
+}
+.collapsed-menu span{
+    width: 0px;
+    transition: width .2s ease;
+}
+.collapsed-menu i{
+    transform: translateX(5px);
+    transition: font-size .2s ease .2s, transform .2s ease .2s;
+    vertical-align: middle;
+    font-size: 22px;
+}
+/*消失时间持续3s
+.fade-enter-active{
+  transition: all 0s;
+}*/
+
+/*显示时间持续1.5s
+.fade-leave-active{
+   transition: all 0.5s;
+}*/
+
+/* 主题 */
+.ivu-menu-dark {
+    background: #141821;
+}
+.ivu-menu-dark.ivu-menu-horizontal .ivu-menu-item,.ivu-menu-dark.ivu-menu-horizontal .ivu-menu-submenu {
+    color: rgba(255,255,255,.7)
+}
+.ivu-menu-dark.ivu-menu-horizontal .ivu-menu-item-active,.ivu-menu-dark.ivu-menu-horizontal .ivu-menu-item:hover,.ivu-menu-dark.ivu-menu-horizontal .ivu-menu-submenu-active,.ivu-menu-dark.ivu-menu-horizontal .ivu-menu-submenu:hover {
+    color: #fff
+}
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-group-title {
+    color: rgba(255,255,255,.36)
+}
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item,.ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title {
+    color: rgba(255,255,255,.7)
+}
+
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu),.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu):hover,.ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu),.ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu):hover {
+    background: #141821
+}
+
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item:hover,.ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title:hover {
+    color: #fff;
+    background: #141821
+}
+
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu),.ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu) {
+    /*color: #2d8cf0*/
+    border-right: none;
+    color: #fff;
+    background: #2d8cf0!important;
+}
+
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item:hover {
+    color: #fff;
+    background: 0 0!important
+}
+
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active,.ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active:hover {
+    border-right: none;
+    color: #fff;
+    background: #2d8cf0!important
+}
+
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-child-item-active>.ivu-menu-submenu-title {
+    color: #fff
+}
+
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-opened {
+    background: #001529
+}
+
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-opened .ivu-menu-submenu-title {
+    background: #001529
+}
+
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-opened .ivu-menu-submenu-has-parent-submenu .ivu-menu-submenu-title {
+    background: 0 0
+}
+
+.ivu-menu-dark.ivu-menu-horizontal .ivu-menu-item-active, .ivu-menu-dark.ivu-menu-horizontal .ivu-menu-item:hover, .ivu-menu-dark.ivu-menu-horizontal .ivu-menu-submenu-active, .ivu-menu-dark.ivu-menu-horizontal .ivu-menu-submenu:hover {
+    color: #2d8cf0!important;
+}
+
+.menu-title{
+    font-size:12px!important;
+}
+.ivu-form-item {
+    margin-bottom: 15px;
+    tical-align: top;
+    zoom: 1;
+}
+.common-upload-list{
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+    box-shadow: 0 1px 1px rgba(0,0,0,.2);
+    margin-right: 4px;
+}
+.common-upload-list img{
+    width: 100%;
+    height: 100%;
+}
+.common-upload-list-cover{
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,.6);
+}
+.common-upload-list:hover .common-upload-list-cover{
+    display: block;
+}
+.common-upload-list-cover i{
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    margin: 0 2px;
+}
+/* 自定义布局组件样式 */
+.channel-card .ivu-card-head{
+    border:none;
+    padding:10px 10px;
+    padding-bottom:0px;
+}
+.channel-card .ivu-divider-horizontal{
+    margin:15px 0px;
+}
+.channel-divider{
+    height: 1px;
+}
+.channel-card .ivu-form-item{
+    margin-bottom: 10px;
+}
+.channel-card .ivu-card-body{
+    padding:10px;
+    padding-bottom:5px;
+}
+.channel-card .ivu-table td, .ivu-table th{
+    height:40px;
+}
+.channel-card .zhankai-icon{
+    transform:rotate(90deg);
+    -ms-transform:rotate(90deg); 	/* IE 9 */
+    -moz-transform:rotate(90deg); 	/* Firefox */
+    -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
+    -o-transform:rotate(90deg); 	/* Opera */
+}
+.channel-card .ivu-page{
+    padding-top:10px;
+    text-align: right;
+}
+.ivu-modal-body form .ivu-form-item{
+    margin-bottom:20px;
+}
+.info-card-wrapper .content-con .right-area {
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    display: table;
+    text-align: center;
+    right: 0px;
+}
+.left-area{
+    height: 100px;
+}
+.icon.ivu-icon{
+      margin-left: 13px;
+      margin-top: 30px;
+  }
+.info-card-wrapper .content-con .right-area {
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    display: table;
+    text-align: center;
+    right: 0px;
+}
+.count-style {
+    font-size: 25px;
+}
+.ivu-col-span-3 {
+    display: block;
+    width: 14.2%;
+}
+.right-area{
+    width: 70%;
+    margin-top: 18px;
+}

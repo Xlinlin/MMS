@@ -1,0 +1,16 @@
+server:
+  port: 3769
+spring:
+  application:
+    name: message-demo
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.206.211:8888/eureka/
+# hystrix超时设置,断路器的超时时间需要大于ribbon的超时时间，不然不会触发重试
+hystrix:
+  command.default.execution.isolation.thread.timeoutInMilliseconds: 160000
+

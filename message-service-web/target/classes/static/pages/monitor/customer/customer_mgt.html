@@ -1,0 +1,44 @@
+<!--
+    名称：消费者管理
+    路径：monitor/customer/customer_mgt.html
+    开发人：杨婷婷
+    日期：2018/10/29
+ -->
+<script type="text/x-template" id="monitor-customer-customer_mgt">
+    <div>
+        <cust-layout ref="custLayout" :hide-header="true" :on-change-height="onChangeHeight" >
+            <span slot="header" >
+            </span>
+            <div slot="query">
+                <i-Form :model="searchForm" inline @keyup.enter.native="query" >
+                    <form-item>
+                        <i-select filterable clearable v-model="searchForm.topic" style="width:250px; " placeholder="请选择Topic..." search enter-button size="small">
+                            <i-option v-for="item in topicList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                        </i-select>
+                    </form-item>
+                    <i-button size="small" type="primary" @click="query" style="margin-top: 4px">搜索</i-button>
+                </i-Form>
+            </div>
+            <div slot="content" >
+                <i-table :columns="columns" size="small" :height="tableAptHeight" border ref="table"  :data="page.content">
+                    <template slot="action" slot-scope="propsList">
+                        <ButtonGroup>
+                            <i-button size="small" @click="toDelete(propsList.row)">删除</i-button>
+                          <!--  <i-button size="small" @click="">消费者状态</i-button>
+                            <i-button size="small" @click="">监控报警</i-button>
+                            <i-button size="small" @click="">获取接入点</i-button>
+                            <i-button size="small" @click="">接收代码</i-button>
+                            <i-button size="small" @click="">更多功能</i-button>-->
+                        </ButtonGroup>
+                    </template>
+                </i-table>
+                <Page :total="page.totalElements" :page-size="page.size"   @on-change="changePage" @on-page-size-change="changePageSize" transfer prev-text="上一页" next-text="下一页" show-sizer size="small"/>
+            </div>
+        </cust-layout>
+        <!--点击删除按钮触发-->
+        <common-delete-modal v-model="deleteModal" title="是否要删除" :on-ok="confirmDelete" ></common-delete-modal>
+
+    </div>
+</script>
+
+<script type="text/javascript" src="pages/monitor/customer/customer_mgt.js"></script>

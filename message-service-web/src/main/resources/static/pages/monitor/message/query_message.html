@@ -1,0 +1,189 @@
+<!--
+    名称：消息查询
+    路径：monitor/message/query_message.html
+    开发人：杨婷婷
+    日期：2018/10/29
+ -->
+<script type="text/x-template" id="monitor-message-query_message">
+    <div>
+        <cust-layout ref="custLayout"  :on-change-height="onChangeHeight" >
+            <span slot="header" >
+                <i-button size="small"  @click="query" style="margin-top: 4px">搜索</i-button>
+            </span>
+            <div slot="query">
+                <i-Form :model="searchForm" inline :label-width="120" style="">
+                    <form-item label="Topic ：">
+                        <i-select filterable clearable v-model="searchForm.topic" placeholder="输入Topic进行搜索" style="width:200px " size="small" clearable>
+                            <i-option v-for="item in topicList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                        </i-select>
+                    </form-item>
+                    <form-item label="Message ID ：">
+                        <i-input v-model="searchForm.messageId"  placeholder="输入Message ID" style="width: 200px;" size="small"/>
+                    </form-item>
+                    <form-item label="Key ：">
+                        <i-input v-model="searchForm.key"  placeholder="输入key" style="width: 200px;" size="small"/>
+                    </form-item>
+                    <form-item label="消息状态 ：" >
+                        <i-select filterable clearable v-model="searchForm.status" style="width:200px;" size="small" clearable>
+                            <i-option v-for="item in statusList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                        </i-select>
+                    </form-item>
+                    <form-item label="开始时间 ：">
+                        <DatePicker v-model="searchForm.startTime" size="small" type="datetime" placeholder="请输入开始时间" style="width: 200px"></DatePicker>
+                    </form-item>
+                    <form-item label="结束时间 ：">
+                        <DatePicker v-model="searchForm.endTime" size="small" type="datetime" placeholder="请输入结束时间" style="width: 200px"></DatePicker>
+                    </form-item>
+                </i-Form>
+            </div>
+            <div slot="content" >
+                <i-table :columns="columns" size="small" :height="tableAptHeight" border  :data="page.content"></i-table>
+                <Page :total="page.totalElements" :page-size="page.size"   @on-change="changePage" @on-page-size-change="changePageSize" transfer prev-text="上一页" next-text="下一页" show-sizer size="small"/>
+            </div>
+        </cust-layout>
+        <Modal v-model="toContent" title="查看消息内容" width="800" footer-hide>
+            <i-button @click="message = JSON.parse(message)">转换json</i-button>
+            <div style="width:100%;height: 400px;overflow: auto;">
+                <pre>{{message}}</pre>
+            </div>
+        </Modal>
+
+        <!-- 确认发送消息 -->
+        <Modal transfer v-model="onSend" width="320"  >
+            <div style="text-align:center;height:80px">
+                <p style="line-height:80px;font-size:16px"><Icon type="ios-information-circle" size="46"/>确认是否发送消息?</p>
+            </div>
+            <div slot="footer" style="text-align:center;">
+                <i-button @click="onOk1" >确认</i-button>
+                <i-button @click="onCancel1" style="margin-left: 60px" >取消</i-button>
+            </div>
+        </Modal>
+
+        <!--详情弹出框 -->
+        <Modal v-model="onDetails" title="查看详情" width="580" footer-hide>
+            <row>
+                <i-col span="6">
+                    <Cell title="messageId：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell :title="detailItem.messageId" style=""/>
+                </i-col>
+            </row>
+            <!--<row>
+                <i-col span="6">
+                    <Cell title="groupId：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell :title="detailItem.groupId" style=" "/>
+                </i-col>
+            </row>-->
+            <row>
+                <i-col span="6">
+                    <Cell title="消息内容：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Input type="textarea" :rows="2" v-model="detailItem.message"  />
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="key：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell :title="detailItem.key"/>
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="businessKey：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell :title="detailItem.businessKey"/>
+                </i-col>
+            </row>
+
+            <row>
+                <i-col span="6">
+                    <Cell title="生产者Ip：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell :title="detailItem.producerIp" />
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="生产Time：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell :title="detailItem.producerTime"/>
+                </i-col>
+            </row>
+
+            <row>
+                <i-col span="6">
+                    <Cell title="接收Ip：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell  :title="detailItem.receiveIp" />
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="接收时间：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell  :title="detailItem.receiveTime" />
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="创建ip：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell  :title="detailItem.createIp" />
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="创建时间：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell  :title="detailItem.createTime" />
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell title="消息状态：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell  :title="detailItem.statuss" />
+                </i-col>
+            </row>
+            <row>
+                <i-col span="6">
+                    <Cell class="spread" title="发送次数：" style="padding-left:30px;"/>
+                </i-col>
+                <i-col span="18">
+                    <Cell  class="spread" :title="detailItem.sendCount" />
+                </i-col>
+            </row>
+            <i-button @click="toPmgress" style="margin-left: 450px">消息进度</i-button>
+        </Modal>
+
+
+        <Modal  v-model="pmgressbar" title="查看进度条"  width="980" footer-hide >
+            <Steps :current="position" status="error" style="height: 80px;">
+                <Step title="服务端接收"  :content="errorMsg0"></Step>
+                <Step title="已发出到redis" :content="errorMsg1"></Step>
+                <Step title="已从Redis读取" :content="errorMsg2"></Step>
+                <Step title="已发送到kafka" :content="errorMsg3"></Step>
+                <Step title="已消费" :content="errorMsg4"></Step>
+            </Steps>
+        </Modal>
+
+    </div>
+
+
+</script>
+
+<script type="text/javascript" src="pages/monitor/message/query_message.js"></script>

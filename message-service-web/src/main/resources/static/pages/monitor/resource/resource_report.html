@@ -1,0 +1,54 @@
+<!--
+    名称：资源报表
+    路径：monitor/resource/resource_report.html
+    开发人：逯思瑶
+    日期：2018/10/29
+ -->
+<script type="text/x-template" id="monitor-resource-resource_report">
+    <cust-layout ref="custLayout" :on-change-height="onChangeHeight">
+        <span slot="header">
+            <ButtonGroup>
+                <i-button @click="toQuery" size="small">查询</i-button>
+                <i-button @click="reset" size="small">重置</i-button>
+            </ButtonGroup>
+        </span>
+        <div slot="query">
+            <i-form :model="formItem" :label-width="100" inline>
+                <form-item label="Consumer ID：">
+                    <i-input v-model="formItem.consumerId" placeholder="请输入Consumer ID" style="width:200px"
+                             size="small"></i-input>
+                </form-item>
+                <form-item label="Topic：">
+                    <i-select v-model="formItem.topic" clearable  style="width:200px" size="small">
+                        <i-option v-for="item in topicList" :value="item.value" :key="item.value">
+                            {{item.label }}
+                        </i-option>
+                    </i-select>
+                </form-item>
+                <form-item label="采集类型：">
+                    <i-input v-model="formItem.collectionType" placeholder="请输入采集类型" style="width:200px"
+                             size="small"></i-input>
+                </form-item>
+                <form-item label="采集周期：">
+                    <i-select v-model="formItem.collectionCycle" clearable  style="width:200px" size="small">
+                        <i-option v-for="item in collectionCycleList" :value="item.value" :key="item.value">
+                            {{item.label }}
+                        </i-option>
+                    </i-select>
+                </form-item>
+                <form-item label="时间范围：">
+                    <date-picker v-model="formItem.dateRange" @on-change="selectDate"  type="daterange" placement="bottom-end" placeholder="选择日期"  style="width: 200px" size="small"></date-picker>
+                </form-item>
+            </i-form>
+        </div>
+        <div slot="content">
+            <i-table border :columns="tablColumns" :data="page.list" :height="tableAptHeight"></i-table>
+            <Page :total="page.total" :page-size="page.pageSize" @on-change="changePage"
+                  @on-page-size-change="changePageSize" size="small" transfer show-total show-sizer
+                  show-elevator/>
+        </div>
+    </cust-layout>
+    </div>
+</script>
+
+<script type="text/javascript" src="pages/monitor/resource/resource_report.js"></script>
